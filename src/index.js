@@ -1,17 +1,36 @@
-const fs = require("node:fs")
+const fs = require("node:fs");
+const fsPromises = require("node:fs/promises");
 
-console.log("Promise output: " + doesFileExist("./pokemonStats.json"))
+console.log("Promise output: " + doesFileExistPromise("./pokemonStats.json"))
 console.log("Sync output: " + doesFileExistSync("./pokemonStats.json"))
 
-function doesFileExist(targetPath){
+function doesFileExistAsync(targetPath){
+
+
+function doesFileExistPromise(targetPath){
     let result = false;
+
+    return new Promise((resolve, reject) => {
+        fsPromises.stat(targetPath).then(statData => {
+            if (statData.size || statData.birthtimeMs){
+                result = true;
+                console.log(result);
+                resolve(result)
+            } else {
+                resolve(result)
+            }
+        }).catch((error) => {
+            console.error(error);
+            reject(error)
+        });    
+    });
 
     // function(data, data, whatever, callbackFunction)
     // fs.exists(targetPath, (doSomethingWithResult()));
-    fs.exists(targetPath, (existsResult) => {
-        result = existsResult;
-        return result;
-    });
+    // fs.exists(targetPath, (existsResult) => {
+    //     result = existsResult;
+    //     return result;
+    // });
     
     
     // fs.exists(targetPath).then((existsResult) => {
