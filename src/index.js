@@ -87,8 +87,17 @@ function createJsonFile(targetPath, data){
     // TODO: wishlist item because a JSON file already exists for us
 }
 
-function loadDataFromFile(targetPath){
+async function loadDataFromFile(targetPath){
     let data = null;
+
+    let doesFileExist = await doesFileExistAsync(targetPath);
+    if (doesFileExist){
+        data = await fsPromises.readFile(targetPath, {encoding: "utf-8"});
+        data = JSON.parse(data);
+
+    }
+    
+
 
     // TODO: Load data from file logic goes here
     // Reading data from files takes time
@@ -96,6 +105,11 @@ function loadDataFromFile(targetPath){
 
     return data;
 }
+
+(async () => {
+    let fileData = await loadDataFromFile("./pokemonStats.json");
+    console.log(fileData);
+})();
 
 /*
 Technique 1 to modify keys in JSON:
